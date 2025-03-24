@@ -14,7 +14,7 @@ const app = express()
 app.use(morgan('dev'))
 app.use(json())
 app.use(cors({
-    origin: process.env.ENV === 'development' ? 'http://localhost:5173' : 'https://your-frontend-url.com',
+    origin: process.env.ENV === 'development' ? 'http://localhost:5173' : 'https://ask-questions-backend.onrender.com',
     credentials: true
 }))
 app.use(cookieParser())
