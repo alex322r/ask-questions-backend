@@ -2,10 +2,10 @@ import pool from "../../db.js"
 
 const Question = {
 
-    async create(title, description, userId) {
+    async create(title, description, userId, guestName) {
         const client = await pool.connect();
         try {
-            const { rows } = await client.query('INSERT INTO questions (title, description) VALUES ($1, $2) RETURNING *', [title, description]);
+            const { rows } = await client.query('INSERT INTO questions (title, description, user_id, guest_name) VALUES ($1, $2, $3, $4) RETURNING *', [title, description, userId, guestName]);
             return rows[0];
         } catch (error) {
             throw error;
@@ -31,7 +31,7 @@ const Question = {
         const offset = (page - 1) * limit;
         console.log({ offset, limit });
         try {
-            const { rows } = await client.query('SELECT id, title, description, user_id, created_at, view_count FROM questions ORDER BY created_at ASC LIMIT $1 OFFSET $2', [ limit, offset]);
+            const { rows } = await client.query('SELECT id, title, description, user_id, guest_name ,created_at, view_count FROM questions ORDER BY created_at ASC LIMIT $1 OFFSET $2', [ limit, offset]);
             console.log(new  Date());
             return rows;
         } catch (error) {

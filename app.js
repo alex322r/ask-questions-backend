@@ -3,15 +3,24 @@ import { json } from 'express';
 import morgan from 'morgan';
 import questionsRoute from './src/routes/questions.js';
 import answerRoute from './src/routes/answers.js';
+import authRoute from './src/routes/auth.js'
 import pool from './db.js';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 
 
-const app = express();
+const app = express()
 
-app.use(morgan('dev'));
-app.use(json());
-app.use(cors())
+app.use(morgan('dev'))
+app.use(json())
+app.use(cors({
+    origin: process.env.ENV === 'development' ? 'http://localhost:5173' : 'https://your-frontend-url.com',
+    credentials: true
+}))
+app.use(cookieParser())
+
+
+app.use('/api/v1', authRoute  )
 
 app.use('/api/v1/questions', questionsRoute);
 app.use('/api/v1/answers', answerRoute);

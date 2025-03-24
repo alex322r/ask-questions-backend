@@ -7,19 +7,27 @@ export async function createQuestion(req, res) {
   // create a new question
   const title = req.body.title;
   const description = req.body.description;
-  const userId = req.user?.id
+
+  const { user_id: userId } = req.user;
+  const { guest_name: guestName } = req.user;
+
+
+  if (!guestName && !userId) {
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
+
   if (!title || !description) {
     return res.status(400).json({ message: 'Please enter all fields' });
   }
 
   try {
-    const question = await Question.create(title, description, "deepspace");
+    const question = await Question.create(title, description, userId, guestName);
     if (!question) {
       return res.status(400).json({ message: 'question failed' });
     }
-    const content = `${question.title} ${question.description}`;
-    const questionId = question.id;
-    const userId = question.user_id;
+    // const content = `${question.title} ${question.description}`;
+    // const questionId = question.id;
+    // const userId = question.user_id;
     //answerQuestion(content, questionId, userId);
     return res.status(201).json(question);
   } catch (error) {
@@ -29,8 +37,7 @@ export async function createQuestion(req, res) {
 
 }
 
-// export async function answerQuestion (content,questionId, userId) {
-//   try {
+// export async function answerQuestion (content,questionId, userId) { try {
 //   const response = await ollama.chat({
 //     model: 'deepseek-r1:7b',
 //     messages: [

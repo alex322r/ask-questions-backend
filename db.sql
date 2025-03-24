@@ -9,11 +9,11 @@ END $$;
 
 \c api_db;
 
-drop table votes;
-drop table answers;
-drop table questions;
-drop table users;
-drop table row_count;
+drop table if exists votes ;
+drop table if exists answers;
+drop table if exists questions;
+drop table if exists users;
+drop table if exists row_count;
 
 CREATE TABLE IF NOT EXISTS users (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -27,12 +27,16 @@ CREATE TABLE IF NOT EXISTS questions (
     title VARCHAR(100) NOT NULL,
     description TEXT NOT NULL,
     user_id UUID NULL,
+    guest_name VARCHAR(30),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     view_count INTEGER DEFAULT 0,
     votes_count INTEGER DEFAULT 0,
     answers_count INTEGER DEFAULT 0,
-    FOREIGN KEY (user_id) REFERENCES users(id)
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    CONSTRAINT check_guest_name CHECK ((user_id IS NULL AND guest_name IS NOT NULL) OR (user_id IS NOT NULL AND guest_name IS NULL))
 );
+
+
 
 DROP FUNCTION IF EXISTS get_question_and_increment_views(integer);
 CREATE OR REPLACE FUNCTION get_question_and_increment_views(p_id INT)

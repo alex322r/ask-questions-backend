@@ -1,6 +1,7 @@
 // question routes
 import { Router } from 'express';
 import { createQuestion, getQuestions, getQuestionById, countQuestions } from '../controllers/questionsController.js';
+import { authentification } from '../controllers/authController.js';
 
 const router = Router();
 
@@ -14,7 +15,7 @@ router.get('/count', countQuestions);
 router.get('/:id', getQuestionById);
 
 //create a question
-router.post('/', createQuestion);  
+router.post('/', authentification ,createQuestion);  
 
 
 export default router
