@@ -13,14 +13,13 @@ router.post('/guest', function handleGuestToken(req, res) {
     const guest_id = randomUUID()
     try {
         const token = jwt.sign({ guest_id, guest_name }, process.env.SECRET_KEY)
-        // res.cookie('token', token, { 
-        //     httpOnly: true,
-        //     secure: process.env.NODE_ENV === 'production',
-        //     sameSite: 'Lax' 
-        // })
-        res.json({message: token})
+        res.cookie('token', token, { 
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'Lax' 
+        })
+        res.json({message: 'Login exitoso'})
     } catch (error) {
-        console.log(error)
         res.status(500).json({error: "Error interno"})
     }
 
