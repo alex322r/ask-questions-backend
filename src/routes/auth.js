@@ -20,7 +20,8 @@ router.post('/guest', function handleGuestToken(req, res) {
         // })
         res.json({message: token})
     } catch (error) {
-        res.status(500).json({error})
+        console.log(error)
+        res.status(500).json({error: "Error interno"})
     }
 
 } )
