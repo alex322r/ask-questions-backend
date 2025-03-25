@@ -9,7 +9,6 @@ router.post('/guest', function handleGuestToken(req, res) {
 
     if (!guest_name || guest_name.length < 3 || guest_name > 30) {
         return res.status(400).json({error: "El nombre debe tener entre 3 y 30 caracteres"})
-
     }
     const guest_id = randomUUID()
     try {
@@ -21,7 +20,7 @@ router.post('/guest', function handleGuestToken(req, res) {
         })
         res.json({message: 'Login exitoso'})
     } catch (error) {
-        res.status(500).json({error: "Error interno"})
+        res.status(500).json({error})
     }
 
 } )
